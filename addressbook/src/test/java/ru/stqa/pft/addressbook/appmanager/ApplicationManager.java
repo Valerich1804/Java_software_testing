@@ -7,9 +7,9 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.remote.BrowserType;
-import ru.stqa.pft.addressbook.model.ContactData;
 
 import java.util.concurrent.TimeUnit;
+
 
 public class ApplicationManager {
     WebDriver wd;
@@ -32,7 +32,7 @@ public class ApplicationManager {
             wd = new ChromeDriver();
         }
 
-//        wd.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+ //       wd.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
         wd.get("http://localhost/addressbook/");
         contactHelper = new ContactHelper(wd);
         sessionHelper = new SessionHelper(wd);
