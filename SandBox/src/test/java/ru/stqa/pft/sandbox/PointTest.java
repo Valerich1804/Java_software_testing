@@ -24,7 +24,7 @@ public class PointTest {
 
   @Test
   public void testDistance4() {
-    Point p = new Point(5, 4);
+    Point p = new Point(9, 16);
     assert p.distance(p) == 0;
   }
 }
