@@ -18,11 +18,11 @@ public class ContactHelper extends HelperBase {
     public ContactHelper(WebDriver wd) {
         super(wd);
     }
-    public void submitContactCreation() {
+    public void creation() {
         click(By.name("submit"));
     }
 
-    public void feelContactForm(ContactData contactData, boolean creation) {
+    public void feelForm(ContactData contactData, boolean creation) {
         type(By.name("firstname"), contactData.getFirstname());
         type(By.name("middlename"), contactData.getMiddlename());
         type(By.name("lastname"), contactData.getLastname());
@@ -42,28 +42,51 @@ public class ContactHelper extends HelperBase {
         click(By.linkText("add new"));
     }
 
-    public void selectContact(int index) {
+    public void select(int index) {
         wd.findElements(By.name("selected[]")).get(index).click();
     }
 
-    public void editContact() {
+    public void newContrct() {
+        addNewContact();
+        feelForm(new ContactData("Andrew", "Valerevich", "Ivanov", "valerich1804", "NN Minina 12", "88991122", "valerich1804@yandex.ru", "test1"), true);
+        creation();
+        homePage();
+    }
+
+    public void edit() {
         click(By.xpath("//img[@alt='Edit']"));
     }
-    public void submitContactModification() {
+    public void modificationContract() {
         click(By.name("update"));
     }
-    public void gotoHomePage() {
+
+    public void modificationContract(ContactData contact, int index) {
+        select(index);
+        edit();
+        feelForm(contact, false);
+        modificationContract();
+        homePage();
+    }
+    public void homePage() {
         if (isElementPresent(By.id("maintable"))){
             return;
         }
         click(By.linkText("home page"));
     }
 
-    public void createContact(ContactData contact, boolean b) {
+    public void create(ContactData contact, boolean b) {
         addNewContact();
-        feelContactForm(new ContactData("Andrew", "Valerevich", "Ivanov", "valerich1804", "NN Minina 12", "88991122", "valerich1804@yandex.ru", "test1"), true);
-        submitContactCreation();
-        gotoHomePage();
+        feelForm(new ContactData("Andrew", "Valerevich", "Ivanov", "valerich1804", "NN Minina 12", "88991122", "valerich1804@yandex.ru", "test1"), true);
+        creation();
+        homePage();
+    }
+
+    public void delete(int index) {
+        select(index);
+        deletContactButton();
+        allerClic();
+        sleep();
+        homePage();
     }
 
     public boolean isThereAContact() {
@@ -82,7 +105,7 @@ public class ContactHelper extends HelperBase {
         wd.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
     }
 
-        public List<ContactData> getContactList() {
+        public List<ContactData> list() {
         List<ContactData> contacts = new ArrayList<>();
         List<WebElement> elements = wd.findElements(By.xpath("//tr[@name = 'entry']"));
         List <WebElement> cellsLasttname = wd.findElements(By.xpath("//tr[@name = 'entry']/td[2]"));
