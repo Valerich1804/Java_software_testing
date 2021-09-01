@@ -8,6 +8,8 @@ import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import ru.stqa.pft.addressbook.model.ContactData;
 import ru.stqa.pft.addressbook.model.Contacts;
+import ru.stqa.pft.addressbook.model.Groups;
+
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -63,6 +65,7 @@ public class ContactHelper extends HelperBase {
         edit();
         feelForm(contact, false);
         modificationContract();
+        contactCache = null;
         homePage();
     }
     public void homePage() {
@@ -76,6 +79,7 @@ public class ContactHelper extends HelperBase {
         addNewContact();
         feelForm(contact, b);
         creation();
+        contactCache = null;
         homePage();
     }
 
@@ -84,7 +88,11 @@ public class ContactHelper extends HelperBase {
         deletContactButton();
         allerClic();
         sleep();
+        contactCache = null;
         homePage();
+    }
+    public int count() {
+        return wd.findElements(By.xpath("//tr[@name = 'entry']")).size();
     }
 
 
@@ -99,9 +107,13 @@ public class ContactHelper extends HelperBase {
     public void sleep(){
         wd.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
     }
+    private Contacts contactCache = null;
 
         public Contacts all() {
-        Contacts contacts = new Contacts();
+            if (contactCache != null){
+                return new Contacts(contactCache);
+            }
+            contactCache = new Contacts();
         List<WebElement> elements = wd.findElements(By.xpath("//tr[@name = 'entry']"));
         List <WebElement> cellsLasttname = wd.findElements(By.xpath("//tr[@name = 'entry']/td[2]"));
         List <WebElement> cellsFirstname = wd.findElements(By.xpath("//tr[@name = 'entry']/td[3]"));
@@ -112,9 +124,9 @@ public class ContactHelper extends HelperBase {
             ContactData contact = new ContactData().withId(id).withFirstname(firstname).withMiddlename("Valerevich1").withLastname(lastname)
                     .withNickname("valerich1804").withAddress("NN Minina 12").withHomephone("88991122").withEmail("valerich1804@yandex.ru")
                     .withGroup("test1");
-            contacts.add(contact);
+            contactCache.add(contact);
         }
 
-        return contacts;
+        return new Contacts(contactCache);
     }
 }
